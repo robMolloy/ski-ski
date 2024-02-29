@@ -1,59 +1,38 @@
-<script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+<script lang="ts">
+	import { resorts } from '../consts';
+	const sortedResorts = [...resorts].sort((a, b) => (a.name < b.name ? -1 : 1));
+	const groupedAndSortedResorts: { [key: string]: typeof sortedResorts } = {};
+	sortedResorts.forEach((x) => {
+		const firstLetter = x.name.slice(0, 1);
+		if (!(firstLetter in groupedAndSortedResorts)) groupedAndSortedResorts[firstLetter] = [];
+		groupedAndSortedResorts[firstLetter].push(x);
+	});
 </script>
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" content="Piste app" />
 </svelte:head>
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+<table class="table table-pin-rows">
+	{#each Object.entries(groupedAndSortedResorts) as [key, groupedAndSortedResortsValues]}
+		<thead>
+			<tr>
+				<th colspan="3">{key}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each groupedAndSortedResortsValues as resort}
+				<tr class="align-middle cursor-pointer hover">
+					<td>{resort.name}</td>
+					<td>{resort.country}</td>
+					<td>
+						<a href={`/${resort.name}`}>
+							<button class="btn btn-primary btn-xs">&gt;</button>
+						</a>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
+	{/each}
+</table>
