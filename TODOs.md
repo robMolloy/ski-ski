@@ -1,2 +1,3 @@
 - for each resort, create a weather, news, cams icon
 - clear up terminology; location, area, resort
+- set up daisyui theme-select
