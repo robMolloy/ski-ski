@@ -1,26 +1,28 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
-	export let availableThemes: string[];
-
-	const dispatch = createEventDispatcher<{ selectTheme: string }>();
+	import { daisyBgColors, daisyContentColors } from '@/src/consts';
+	import { currentTheme, availableThemes } from '@/src/stores/themeStore';
 </script>
 
-<div class="flex flex-col gap-2 overflow-auto max-h-[75vh]">
-	{#each availableThemes as value}
-		<button
-			class="flex w-full btn flex-nowrap"
-			data-theme={value}
-			on:click={() => dispatch('selectTheme', value)}
-		>
-			<span class="flex-1 text-start">{value}</span>
-			<span class="flex flex-none gap-[2px] items-center">
-				<div class="badge badge-xs badge-neutral"></div>
-				<div class="badge badge-xs badge-primary"></div>
-				<div class="badge badge-xs badge-secondary"></div>
-				<div class="badge badge-xs badge-accent"></div>
-				<div class="badge badge-xs badge-info"></div>
-			</span>
-		</button>
+<div class="flex flex-col gap-2">
+	{#each $availableThemes as theme}
+		<div>
+			<button
+				class="flex flex-col w-full gap-2 btn min-h-10"
+				data-set-theme={theme}
+				{...theme === $currentTheme ? {} : { 'data-theme': theme }}
+				on:click={(e) => currentTheme.set(theme)}
+			>
+				<span class="text-start">{theme}</span>
+				<span class="flex flex-none gap-[2px] items-center">
+					{#each daisyBgColors as daisyColor}
+						<div class="tooltip" data-tip={daisyColor}>
+							<div class={`badge badge-xs badge-${daisyColor}`}>
+								<div class={`text-${daisyColor}-content`}>&middot;</div>
+							</div>
+						</div>
+					{/each}
+				</span>
+			</button>
+		</div>
 	{/each}
 </div>

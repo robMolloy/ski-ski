@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { resorts } from '../consts';
+	import { goto } from '$app/navigation';
+	import { daisyBgColors, resorts } from '../consts';
 	const sortedResorts = [...resorts].sort((a, b) => (a.name < b.name ? -1 : 1));
 	const groupedAndSortedResorts: { [key: string]: typeof sortedResorts } = {};
 	sortedResorts.forEach((x) => {
@@ -17,19 +18,20 @@
 <table class="table table-pin-rows">
 	{#each Object.entries(groupedAndSortedResorts) as [key, groupedAndSortedResortsValues]}
 		<thead>
-			<tr>
+			<tr class="border-base-content">
 				<th colspan="3">{key}</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each groupedAndSortedResortsValues as resort}
-				<tr class="align-middle cursor-pointer hover">
+				<tr
+					class="align-middle cursor-pointer border-base-content hover"
+					on:click={() => goto(`/${resort.name}`)}
+				>
 					<td>{resort.name}</td>
 					<td>{resort.country}</td>
 					<td>
-						<a href={`/${resort.name}`}>
-							<button class="btn btn-primary btn-xs">&gt;</button>
-						</a>
+						<button class="btn btn-primary btn-xs">&gt;</button>
 					</td>
 				</tr>
 			{/each}

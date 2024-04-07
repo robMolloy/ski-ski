@@ -51,3 +51,17 @@ export const resorts = [
 	{ name: 'Garmisch Classic', country: 'Germany' },
 	{ name: 'Montgenèvre', country: 'France' }
 ];
+
+export const daisyBgColors = [
+	'default',
+	'neutral',
+	'primary',
+	'secondary',
+	'accent',
+	'info',
+	'success',
+	'warning',
+	'error',
+	'ghost'
+];
+export const daisyContentColors = daisyBgColors.map((x) => `${x}-content`);
